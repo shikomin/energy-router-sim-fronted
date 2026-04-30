@@ -1,0 +1,77 @@
+gitignore
+# 依赖目录
+node_modules/
+jspm_packages/
+bower_components/
+
+# 构建输出目录
+dist/
+build/
+out/
+.next/
+.nuxt/
+.output/
+
+# 缓存目录
+.cache/
+.parcel-cache/
+.turbo/
+
+# 日志文件
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 环境变量文件（已允许提交，不再忽略）
+# .env
+# .env.local
+# .env.*.local
+# .env.development.local
+# .env.test.local
+# .env.production.local
+
+# 编辑器目录和文件
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# 运行时数据
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# 覆盖率目录
+coverage/
+.nyc_output/
+
+# 打包文件
+*.tgz
+*.tar.gz
+*.rar
+*.zip
+
+# 临时文件
+tmp/
+temp/
+
+# 类型生成文件
+*.tsbuildinfo
+
+# 框架特定
+.eslintcache
+.stylelintcache
+.prettierignore
+.vercel
+.netlify
+
+# 锁文件（根据需要决定是否提交）
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
