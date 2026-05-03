@@ -17,9 +17,14 @@ export default defineConfig(({ mode }) => {
       host: "0.0.0.0",
       proxy: {
         "/api-dev": {
-          target: env.VITE_API_URL || "http://localhost:16800",
+          target: env.VITE_API_URL || "http://localhost:36750",
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api-dev/, ""),
+          rewrite: (path) => path.replace(/^\/api-dev/, "/api"),
+        },
+        "/ws": {
+          target: env.VITE_WS_URL || "ws://localhost:36750",
+          ws: true,
+          changeOrigin: true,
         },
       },
     },

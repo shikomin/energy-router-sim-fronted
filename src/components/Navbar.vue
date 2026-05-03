@@ -5,10 +5,10 @@ const router = useRouter();
 const route = useRoute();
 
 const navItems = [
-  { name: "Home", label: "首页", path: "/" },
-  { name: "Dashboard", label: "仪表盘", path: "/dashboard" },
-  { name: "About", label: "关于", path: "/about" },
-  { name: "Settings", label: "设置", path: "/settings" },
+  { name: "Dashboard", label: "仪表盘", path: "/" },
+  { name: "Devices", label: "设备管理", path: "/devices" },
+  { name: "Topology", label: "拓扑管理", path: "/topology" },
+  { name: "Settings", label: "系统设置", path: "/settings" },
 ];
 
 const isActive = (path: string) => route.path === path;
