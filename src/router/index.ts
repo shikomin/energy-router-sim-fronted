@@ -1,4 +1,4 @@
-﻿import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
@@ -18,9 +18,9 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/Topology.vue')
   },
   {
-    path: '/settings',
-    name: 'Settings',
-    component: () => import('@/views/Settings.vue')
+    path: '/points',
+    name: 'Points',
+    component: () => import('@/views/PointManagement.vue')
   }
 ]
 

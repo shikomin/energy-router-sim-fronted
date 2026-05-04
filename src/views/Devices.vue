@@ -15,7 +15,8 @@ const currentDevice = ref<Device>({
   ip: '',
   port: 502,
   communicationType: 'Modbus-TCP',
-  slaveId: 1
+  slaveId: 1,
+  deviceLocalNum: ''
 })
 
 const loadDevices = async () => {
@@ -50,7 +51,8 @@ const openAddModal = () => {
     ip: '',
     port: 502,
     communicationType: 'Modbus-TCP',
-    slaveId: 1
+    slaveId: 1,
+    deviceLocalNum: ''
   }
   showModal.value = true
 }
@@ -70,7 +72,8 @@ const closeModal = () => {
     ip: '',
     port: 502,
     communicationType: 'Modbus-TCP',
-    slaveId: 1
+    slaveId: 1,
+    deviceLocalNum: ''
   }
 }
 
@@ -155,6 +158,7 @@ onMounted(async () => {
             <th>设备名称</th>
             <th>设备类型</th>
             <th>类别</th>
+            <th>设备本地编号</th>
             <th>通信方式</th>
             <th>IP地址</th>
             <th>端口</th>
@@ -168,6 +172,7 @@ onMounted(async () => {
             <td>{{ device.name }}</td>
             <td>{{ getDeviceTypeName(device.type) }}</td>
             <td>{{ getDeviceCategory(device.type) }}</td>
+            <td>{{ device.deviceLocalNum || '-' }}</td>
             <td>{{ device.communicationType }}</td>
             <td>{{ device.ip || '-' }}</td>
             <td>{{ device.port || '-' }}</td>
@@ -256,6 +261,15 @@ onMounted(async () => {
               max="255"
             />
           </div>
+          <div class="form-group">
+            <label class="form-label">设备本地编号</label>
+            <input
+              v-model="currentDevice.deviceLocalNum"
+              type="text"
+              class="input"
+              placeholder="请输入设备本地编号"
+            />
+          </div>
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" @click="closeModal">取消</button>
@@ -268,62 +282,85 @@ onMounted(async () => {
 
 <style scoped>
 .devices-page {
-  padding: 1rem;
+  padding: 1.5rem;
+  min-height: calc(100vh - 80px);
 }
 
 .page-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #e6edf3;
   margin-bottom: 1.5rem;
 }
 
 .error-message {
-  background-color: #fee;
-  color: #c33;
-  padding: 0.75rem;
-  border-radius: 4px;
-  margin-bottom: 1rem;
+  background: linear-gradient(135deg, rgba(255, 77, 79, 0.15) 0%, rgba(255, 77, 79, 0.05) 100%);
+  border: 1px solid rgba(255, 77, 79, 0.3);
+  color: #ff7875;
+  padding: 0.875rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
   cursor: pointer;
 }
 
 .toolbar {
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  gap: 0.75rem;
 }
 
 .table-container {
   overflow-x: auto;
+  background: linear-gradient(145deg, rgba(30, 35, 50, 0.6) 0%, rgba(20, 25, 38, 0.8) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1rem;
 }
 
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
-  border-radius: 8px;
-  overflow: hidden;
 }
 
 .data-table th,
 .data-table td {
   padding: 0.75rem 1rem;
   text-align: left;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .data-table th {
-  background: #f5f5f5;
+  background: rgba(255, 255, 255, 0.02);
   font-weight: 600;
-  color: #333;
+  color: #8b949e;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.data-table tbody tr {
+  transition: background-color 0.15s;
 }
 
 .data-table tbody tr:hover {
-  background: #fafafa;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.data-table td {
+  color: #c9d1d9;
+  font-size: 0.875rem;
 }
 
 .loading,
 .empty-message {
   text-align: center;
-  padding: 2rem;
-  color: #999;
-  background: #fff;
-  border-radius: 8px;
+  padding: 3rem;
+  color: #6e7681;
+  background: linear-gradient(145deg, rgba(30, 35, 50, 0.6) 0%, rgba(20, 25, 38, 0.8) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  font-size: 0.9rem;
 }
 
 .modal-overlay {
@@ -332,20 +369,23 @@ onMounted(async () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  backdrop-filter: blur(4px);
 }
 
 .modal {
-  background: #fff;
-  border-radius: 8px;
+  background: linear-gradient(145deg, #1c2128 0%, #161b22 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
   width: 90%;
   max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
 }
 
 .modal-header {
@@ -353,12 +393,13 @@ onMounted(async () => {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .modal-header h2 {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
+  color: #e6edf3;
 }
 
 .modal-close {
@@ -366,11 +407,12 @@ onMounted(async () => {
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #999;
+  color: #6e7681;
+  transition: color 0.2s;
 }
 
 .modal-close:hover {
-  color: #333;
+  color: #e6edf3;
 }
 
 .modal-body {
@@ -382,7 +424,7 @@ onMounted(async () => {
   justify-content: flex-end;
   gap: 0.5rem;
   padding: 1rem 1.5rem;
-  border-top: 1px solid #eee;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .form-group {
@@ -393,77 +435,92 @@ onMounted(async () => {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: #333;
+  color: #8b949e;
+  font-size: 0.85rem;
 }
 
 .form-hint {
   display: block;
   margin-top: 0.25rem;
   font-size: 0.75rem;
-  color: #999;
+  color: #6e7681;
 }
 
 .input,
 .select {
   width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
+  padding: 0.625rem 0.875rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
   font-size: 0.875rem;
   box-sizing: border-box;
+  color: #e6edf3;
+  transition: all 0.2s;
 }
 
 .input:focus,
 .select:focus {
   outline: none;
-  border-color: #40a9ff;
+  border-color: rgba(24, 144, 255, 0.5);
+  box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.1);
+}
+
+.input::placeholder {
+  color: #484f58;
 }
 
 .input:disabled {
-  background-color: #f5f5f5;
+  background-color: rgba(255, 255, 255, 0.02);
   cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .btn {
   padding: 0.5rem 1rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 0.875rem;
-  transition: background-color 0.2s;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s;
 }
 
 .btn-primary {
-  background-color: #1890ff;
+  background: linear-gradient(135deg, #1f6feb 0%, #388bfd 100%);
   color: white;
+  box-shadow: 0 2px 8px rgba(31, 111, 235, 0.25);
 }
 
 .btn-primary:hover {
-  background-color: #40a9ff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(31, 111, 235, 0.35);
 }
 
 .btn-secondary {
-  background-color: #fff;
-  color: #333;
-  border: 1px solid #d9d9d9;
+  background: rgba(255, 255, 255, 0.06);
+  color: #c9d1d9;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .btn-secondary:hover {
-  color: #40a9ff;
-  border-color: #40a9ff;
+  background: rgba(255, 255, 255, 0.1);
+  color: #e6edf3;
 }
 
 .btn-danger {
-  background-color: #ff4d4f;
+  background: linear-gradient(135deg, #da3633 0%, #f85149 100%);
   color: white;
+  box-shadow: 0 2px 8px rgba(218, 54, 51, 0.25);
 }
 
 .btn-danger:hover {
-  background-color: #ff7875;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(218, 54, 51, 0.35);
 }
 
 .btn-small {
-  padding: 0.25rem 0.5rem;
+  padding: 0.3rem 0.6rem;
   font-size: 0.75rem;
   margin-right: 0.5rem;
 }

@@ -372,32 +372,38 @@ onMounted(async () => {
 
 <style scoped>
 .topology-page {
-  padding: 1rem;
-  height: 100%;
+  padding: 1.5rem;
+  min-height: calc(100vh - 80px);
 }
 
 .page-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #e6edf3;
   margin-bottom: 1.5rem;
 }
 
 .error-message {
-  background-color: #fee;
-  color: #c33;
-  padding: 0.75rem;
-  border-radius: 4px;
-  margin-bottom: 1rem;
+  background: linear-gradient(135deg, rgba(255, 77, 79, 0.15) 0%, rgba(255, 77, 79, 0.05) 100%);
+  border: 1px solid rgba(255, 77, 79, 0.3);
+  color: #ff7875;
+  padding: 0.875rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
 }
 
 .layout {
   display: flex;
   gap: 1rem;
-  height: calc(100vh - 150px);
+  height: calc(100vh - 180px);
 }
 
 .sidebar {
   width: 280px;
-  background: #fff;
-  border-radius: 8px;
+  background: linear-gradient(145deg, rgba(30, 35, 50, 0.8) 0%, rgba(20, 25, 38, 0.9) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
   padding: 1rem;
   overflow-y: auto;
 }
@@ -407,10 +413,17 @@ onMounted(async () => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .sidebar-header h3 {
   margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #8b949e;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .topology-list {
@@ -420,30 +433,38 @@ onMounted(async () => {
 }
 
 .topology-item {
-  padding: 0.75rem;
-  border-radius: 4px;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
   cursor: pointer;
   margin-bottom: 0.5rem;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
+  border: 1px solid transparent;
 }
 
 .topology-item:hover {
-  background: #f5f5f5;
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .topology-item.active {
-  background: #e6f7ff;
-  color: #1890ff;
+  background: linear-gradient(135deg, rgba(31, 111, 235, 0.2) 0%, rgba(31, 111, 235, 0.08) 100%);
+  border-color: rgba(31, 111, 235, 0.3);
 }
 
 .topology-name {
   font-weight: 500;
+  color: #e6edf3;
+  font-size: 0.9rem;
+}
+
+.topology-item.active .topology-name {
+  color: #58a6ff;
 }
 
 .main-content {
   flex: 1;
-  background: #fff;
-  border-radius: 8px;
+  background: linear-gradient(145deg, rgba(30, 35, 50, 0.6) 0%, rgba(20, 25, 38, 0.8) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
   padding: 1.5rem;
   overflow-y: auto;
 }
@@ -453,25 +474,28 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: #999;
+  color: #6e7681;
 }
 
 .content-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .content-header h2 {
   margin: 0 0 0.5rem 0;
+  color: #e6edf3;
+  font-size: 1.25rem;
 }
 
 .topology-description {
-  color: #666;
+  color: #6e7681;
   margin: 0;
+  font-size: 0.875rem;
 }
 
 .content-actions {
@@ -481,26 +505,37 @@ onMounted(async () => {
 
 .buses-section h3 {
   margin-bottom: 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #8b949e;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .bus-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1rem;
 }
 
 .bus-card {
-  border: 1px solid #e8e8e8;
-  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
   padding: 1rem;
+  background: rgba(40, 45, 60, 0.4);
+  transition: all 0.25s;
+}
+
+.bus-card:hover {
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .bus-ac {
-  border-left: 4px solid #faad14;
+  border-left: 3px solid #ffb84d;
 }
 
 .bus-dc {
-  border-left: 4px solid #1890ff;
+  border-left: 3px solid #40a9ff;
 }
 
 .bus-header {
@@ -509,18 +544,21 @@ onMounted(async () => {
   align-items: center;
   margin-bottom: 1rem;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .bus-name {
   font-weight: 600;
+  color: #e6edf3;
 }
 
 .bus-type {
-  font-size: 0.75rem;
-  padding: 0.25rem 0.5rem;
-  background: #f5f5f5;
-  border-radius: 4px;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.625rem;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  color: #8b949e;
+  font-weight: 600;
 }
 
 .bus-devices {
@@ -532,10 +570,16 @@ onMounted(async () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem;
-  background: #fafafa;
-  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
   margin-bottom: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.connected-device span {
+  color: #c9d1d9;
+  font-size: 0.85rem;
 }
 
 .bus-actions {
@@ -547,7 +591,7 @@ onMounted(async () => {
 .empty-message {
   text-align: center;
   padding: 2rem;
-  color: #999;
+  color: #6e7681;
 }
 
 .modal-overlay {
@@ -556,20 +600,23 @@ onMounted(async () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  backdrop-filter: blur(4px);
 }
 
 .modal {
-  background: #fff;
-  border-radius: 8px;
+  background: linear-gradient(145deg, #1c2128 0%, #161b22 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
   width: 90%;
   max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
 }
 
 .modal-header {
@@ -577,12 +624,13 @@ onMounted(async () => {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .modal-header h2 {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
+  color: #e6edf3;
 }
 
 .modal-close {
@@ -590,11 +638,12 @@ onMounted(async () => {
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #999;
+  color: #6e7681;
+  transition: color 0.2s;
 }
 
 .modal-close:hover {
-  color: #333;
+  color: #e6edf3;
 }
 
 .modal-body {
@@ -606,7 +655,7 @@ onMounted(async () => {
   justify-content: flex-end;
   gap: 0.5rem;
   padding: 1rem 1.5rem;
-  border-top: 1px solid #eee;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .form-group {
@@ -617,18 +666,22 @@ onMounted(async () => {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: #333;
+  color: #8b949e;
+  font-size: 0.85rem;
 }
 
 .input,
 .select,
 .textarea {
   width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
+  padding: 0.625rem 0.875rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
   font-size: 0.875rem;
   box-sizing: border-box;
+  color: #e6edf3;
+  transition: all 0.2s;
 }
 
 .textarea {
@@ -639,57 +692,69 @@ onMounted(async () => {
 .select:focus,
 .textarea:focus {
   outline: none;
-  border-color: #40a9ff;
+  border-color: rgba(24, 144, 255, 0.5);
+  box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.1);
+}
+
+.input::placeholder {
+  color: #484f58;
 }
 
 .select-small {
-  padding: 0.25rem;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
-  font-size: 0.75rem;
+  padding: 0.375rem 0.5rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  font-size: 0.8rem;
   flex: 1;
+  color: #e6edf3;
 }
 
 .btn {
   padding: 0.5rem 1rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 0.875rem;
-  transition: background-color 0.2s;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s;
 }
 
 .btn-primary {
-  background-color: #1890ff;
+  background: linear-gradient(135deg, #1f6feb 0%, #388bfd 100%);
   color: white;
+  box-shadow: 0 2px 8px rgba(31, 111, 235, 0.25);
 }
 
 .btn-primary:hover {
-  background-color: #40a9ff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(31, 111, 235, 0.35);
 }
 
 .btn-secondary {
-  background-color: #fff;
-  color: #333;
-  border: 1px solid #d9d9d9;
+  background: rgba(255, 255, 255, 0.06);
+  color: #c9d1d9;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .btn-secondary:hover {
-  color: #40a9ff;
-  border-color: #40a9ff;
+  background: rgba(255, 255, 255, 0.1);
+  color: #e6edf3;
 }
 
 .btn-danger {
-  background-color: #ff4d4f;
+  background: linear-gradient(135deg, #da3633 0%, #f85149 100%);
   color: white;
+  box-shadow: 0 2px 8px rgba(218, 54, 51, 0.25);
 }
 
 .btn-danger:hover {
-  background-color: #ff7875;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(218, 54, 51, 0.35);
 }
 
 .btn-small {
-  padding: 0.25rem 0.5rem;
+  padding: 0.3rem 0.6rem;
   font-size: 0.75rem;
 }
 </style>

@@ -40,8 +40,19 @@ export interface Device {
   port?: number
   communicationType?: string
   slaveId?: number
+  deviceLocalNum?: string
   busType?: string
   connections?: Record<string, { busId: string; port: string }>
+}
+
+export interface Point {
+  id: string
+  ptId: string
+  ptName: string
+  deviceLocalNum: string
+  signalType: string
+  modelType: number
+  linkedProp?: string
 }
 
 export interface DeviceType {

@@ -53,39 +53,51 @@ const features = ref([
 </template>
 
 <style scoped>
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #e6edf3;
+  margin-bottom: 1.5rem;
+}
+
 .about-content {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .card {
-  background: white;
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(145deg, rgba(30, 35, 50, 0.6) 0%, rgba(20, 25, 38, 0.8) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1.25rem;
 }
 
 .card h2 {
   margin-bottom: 1rem;
-  color: #2c3e50;
+  color: #e6edf3;
+  font-size: 1rem;
 }
 
 .card p {
   line-height: 1.6;
-  color: #666;
+  color: #8b949e;
+  font-size: 0.9rem;
 }
 
 .feature-list {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .feature-list li {
   display: flex;
   align-items: center;
   padding: 0.75rem 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: #c9d1d9;
+  font-size: 0.9rem;
 }
 
 .feature-list li:last-child {
@@ -93,7 +105,7 @@ const features = ref([
 }
 
 .check-icon {
-  color: #27ae60;
+  color: #3fb950;
   margin-right: 0.75rem;
   font-weight: bold;
 }
@@ -109,20 +121,21 @@ const features = ref([
   flex-direction: column;
   align-items: center;
   padding: 1rem;
-  background: #f8f9fa;
+  background: rgba(255, 255, 255, 0.03);
   border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .avatar {
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #3498db, #2980b9);
+  background: linear-gradient(135deg, #1f6feb 0%, #388bfd 100%);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 0.75rem;
 }
@@ -133,11 +146,12 @@ const features = ref([
 
 .member-info .name {
   font-weight: 600;
-  color: #2c3e50;
+  color: #e6edf3;
+  font-size: 0.9rem;
 }
 
 .member-info .role {
-  font-size: 0.875rem;
-  color: #666;
+  font-size: 0.8rem;
+  color: #6e7681;
 }
 </style>

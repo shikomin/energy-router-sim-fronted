@@ -108,29 +108,37 @@ const saveSettings = () => {
 </template>
 
 <style scoped>
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #e6edf3;
+  margin-bottom: 1.5rem;
+}
+
 .settings-content {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
   max-width: 600px;
 }
 
 .card {
-  background: white;
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(145deg, rgba(30, 35, 50, 0.6) 0%, rgba(20, 25, 38, 0.8) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1.25rem;
 }
 
 .card h2 {
-  margin-bottom: 1.5rem;
-  color: #2c3e50;
+  margin-bottom: 1.25rem;
+  color: #e6edf3;
+  font-size: 1rem;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .form-group:last-child {
@@ -138,35 +146,49 @@ const saveSettings = () => {
 }
 
 .form-label {
-  display: block;
+  display: flex;
+  align-items: center;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: #333;
+  color: #8b949e;
+  font-size: 0.9rem;
+  cursor: pointer;
 }
 
 .form-hint {
-  font-size: 0.875rem;
-  color: #666;
+  font-size: 0.8rem;
+  color: #6e7681;
   margin-top: 0.25rem;
 }
 
 .checkbox {
   margin-right: 0.5rem;
+  width: 16px;
+  height: 16px;
+  accent-color: #58a6ff;
 }
 
 .select {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
+  padding: 0.625rem 0.875rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
-  font-size: 1rem;
-  background: white;
+  font-size: 0.875rem;
+  color: #e6edf3;
   cursor: pointer;
+  transition: all 0.2s;
 }
 
 .select:focus {
   outline: none;
-  border-color: #3498db;
+  border-color: rgba(24, 144, 255, 0.5);
+  box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.1);
+}
+
+.select option {
+  background: #1c2128;
+  color: #e6edf3;
 }
 
 .radio-group {
@@ -178,43 +200,53 @@ const saveSettings = () => {
   display: flex;
   align-items: center;
   cursor: pointer;
+  color: #c9d1d9;
+  font-size: 0.9rem;
 }
 
 .radio {
   margin-right: 0.5rem;
+  width: 16px;
+  height: 16px;
+  accent-color: #58a6ff;
 }
 
 .btn {
-  padding: 0.75rem 1.5rem;
+  padding: 0.625rem 1.25rem;
   border: none;
   border-radius: 6px;
-  font-size: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.2s;
 }
 
 .btn-primary {
-  background: #3498db;
+  background: linear-gradient(135deg, #1f6feb 0%, #388bfd 100%);
   color: white;
+  box-shadow: 0 2px 8px rgba(31, 111, 235, 0.25);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #2980b9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(31, 111, 235, 0.35);
 }
 
 .btn-primary:disabled {
-  background: #bdc3c7;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
 .btn-secondary {
-  background: #ecf0f1;
-  color: #333;
+  background: rgba(255, 255, 255, 0.06);
+  color: #c9d1d9;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   margin-left: 0.75rem;
 }
 
 .btn-secondary:hover {
-  background: #bdc3c7;
+  background: rgba(255, 255, 255, 0.1);
+  color: #e6edf3;
 }
 
 .actions {

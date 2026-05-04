@@ -66,22 +66,36 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #e6edf3;
+  margin-bottom: 1.5rem;
+}
+
+.loading {
+  padding: 2rem;
+  text-align: center;
+  color: #6e7681;
+}
+
 .home-content {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .card {
-  background: white;
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(145deg, rgba(30, 35, 50, 0.6) 0%, rgba(20, 25, 38, 0.8) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1.25rem;
 }
 
 .card h2 {
   margin-bottom: 1rem;
-  color: #2c3e50;
+  color: #e6edf3;
+  font-size: 1rem;
 }
 
 .info-grid {
@@ -94,20 +108,23 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   padding: 1rem;
-  background: #f8f9fa;
-  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .info-item .label {
-  font-size: 0.875rem;
-  color: #666;
-  margin-bottom: 0.25rem;
+  font-size: 0.8rem;
+  color: #6e7681;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .info-item .value {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #2c3e50;
+  color: #e6edf3;
 }
 
 .features {
@@ -117,25 +134,26 @@ onMounted(() => {
 }
 
 .feature-item {
-  padding: 1rem;
-  background: #f8f9fa;
-  border-radius: 6px;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
   text-align: center;
+  transition: all 0.2s;
+}
+
+.feature-item:hover {
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .feature-item h3 {
   margin-bottom: 0.5rem;
-  color: #3498db;
+  color: #58a6ff;
+  font-size: 0.95rem;
 }
 
 .feature-item p {
-  font-size: 0.875rem;
-  color: #666;
-}
-
-.loading {
-  padding: 2rem;
-  text-align: center;
-  color: #666;
+  font-size: 0.85rem;
+  color: #6e7681;
 }
 </style>
