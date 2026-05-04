@@ -40,6 +40,7 @@ export interface Device {
   port?: number
   communicationType?: string
   slaveId?: number
+  busType?: string
   connections?: Record<string, { busId: string; port: string }>
 }
 

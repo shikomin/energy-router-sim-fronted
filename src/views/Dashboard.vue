@@ -10,6 +10,10 @@ const deviceRuntimes = ref<Map<string, DeviceRuntime>>(new Map())
 const simulatorStatus = ref<SimulatorStatus | null>(null)
 const busPowers = ref<Map<string, number>>(new Map())
 const busVoltages = ref<Map<string, number>>(new Map())
+const currentSimulationTime = ref(0)
+const currentSystemState = ref('')
+const currentSubState = ref('')
+const currentWeather = ref<{condition: string, irradiance: number, ambientTemp: number} | null>(null)
 
 const loading = ref(false)
 const error = ref('')
@@ -58,13 +62,13 @@ const totalGridPower = computed(() => {
 })
 
 const batterySOC = computed(() => {
-  deviceRuntimes.value.forEach((runtime, deviceId) => {
+  for (const [deviceId, runtime] of deviceRuntimes.value) {
     const device = devices.value.find(d => d.id === deviceId)
     if (device && device.type === 'BMS') {
-      const soc = (runtime.telemetry?.totalSOC as number ?? 0) / 10
+      const soc = (runtime.telemetry?.totalSOC as number ?? 0)
       return soc.toFixed(1)
     }
-  })
+  }
   return '--'
 })
 
@@ -167,20 +171,36 @@ const handleDeviceUpdates = (data: Record<string, any>) => {
   if (data.busVoltages) {
     busVoltages.value = new Map(Object.entries(data.busVoltages))
   }
+  if (data.simulationTime !== undefined) {
+    currentSimulationTime.value = data.simulationTime*1000
+  }
+  if (data.systemState) {
+    currentSystemState.value = data.systemState
+  }
+  if (data.subState) {
+    currentSubState.value = data.subState
+  }
+  if (data.weather) {
+    currentWeather.value = data.weather
+  }
 }
 
 const getDeviceStatusText = (deviceId: string): string => {
   const runtime = deviceRuntimes.value.get(deviceId)
   if (!runtime) return '离线'
-  const running = runtime.telesignal?.running ?? 0
-  return running === 1 ? '运行中' : '待机'
+  const hasPowerData = Object.entries(runtime.telemetry || {}).some(
+    ([key, value]) => key.toLowerCase().includes('power') && (value as number) !== 0
+  )
+  return hasPowerData ? '运行中' : '待机'
 }
 
 const getDeviceStatusClass = (deviceId: string): string => {
   const runtime = deviceRuntimes.value.get(deviceId)
   if (!runtime) return 'status-offline'
-  const running = runtime.telesignal?.running ?? 0
-  return running === 1 ? 'status-running' : 'status-standby'
+  const hasPowerData = Object.entries(runtime.telemetry || {}).some(
+    ([key, value]) => key.toLowerCase().includes('power') && (value as number) !== 0
+  )
+  return hasPowerData ? 'status-running' : 'status-standby'
 }
 
 const getTelemetryValue = (deviceId: string, key: string, unit: string = '', factor: number = 1): string => {
@@ -323,7 +343,7 @@ onUnmounted(() => {
           </div>
           <div class="status-item">
             <span class="status-label">模拟时间:</span>
-            <span class="status-value">{{ formatTime(simulatorStatus?.simulationTime || 0) }}</span>
+            <span class="status-value">{{ formatTime(currentSimulationTime) }}</span>
           </div>
           <div class="status-item">
             <span class="status-label">步进间隔:</span>
@@ -392,7 +412,7 @@ onUnmounted(() => {
             </div>
             <div class="info-row" v-if="device.type === 'BMS'">
               <span class="info-label">SOC:</span>
-              <span class="info-value">{{ getTelemetryValue(device.id, 'totalSOC', '%', 10) }}</span>
+              <span class="info-value">{{ getTelemetryValue(device.id, 'totalSOC', '%', 1) }}</span>
             </div>
             <div class="info-row" v-if="device.type === 'BMS'">
               <span class="info-label">电压:</span>
@@ -414,6 +434,32 @@ onUnmounted(() => {
               <span class="info-label">正向电量:</span>
               <span class="info-value">{{ getTelemetryValue(device.id, 'forwardEnergy', 'kWh', 1) }}</span>
             </div>
+            <template v-if="device.type === 'BUS'">
+              <div class="info-row" v-if="device.busType === 'AC'">
+                <span class="info-label">电压:</span>
+                <span class="info-value">{{ getTelemetryValue(device.id, 'voltage', 'V', 1) }}</span>
+              </div>
+              <div class="info-row" v-if="device.busType === 'AC'">
+                <span class="info-label">电流:</span>
+                <span class="info-value">{{ getTelemetryValue(device.id, 'current', 'A', 1) }}</span>
+              </div>
+              <div class="info-row" v-if="device.busType === 'AC'">
+                <span class="info-label">有功功率:</span>
+                <span class="info-value">{{ getTelemetryValue(device.id, 'activePower', 'kW', 10) }}</span>
+              </div>
+              <div class="info-row" v-if="device.busType === 'DC'">
+                <span class="info-label">电压:</span>
+                <span class="info-value">{{ getTelemetryValue(device.id, 'voltage', 'V', 1) }}</span>
+              </div>
+              <div class="info-row" v-if="device.busType === 'DC'">
+                <span class="info-label">电流:</span>
+                <span class="info-value">{{ getTelemetryValue(device.id, 'current', 'A', 1) }}</span>
+              </div>
+              <div class="info-row" v-if="device.busType === 'DC'">
+                <span class="info-label">功率:</span>
+                <span class="info-value">{{ getTelemetryValue(device.id, 'activePower', 'kW', 10) }}</span>
+              </div>
+            </template>
             <div class="info-row" v-if="device.ip">
               <span class="info-label">地址:</span>
               <span class="info-value">{{ device.ip }}:{{ device.port }}</span>
