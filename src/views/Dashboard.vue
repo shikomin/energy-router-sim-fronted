@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { simulationApi, topologyApi, deviceApi, type Topology, type Device, type SimulatorStatus, type DeviceRuntime } from '@/api'
 import { wsManager } from '@/api/wsManager'
+import CircuitDiagram from '@/components/CircuitDiagram.vue'
 
 const topologies = ref<Topology[]>([])
 const selectedTopologyId = ref<string>('')
@@ -364,6 +365,13 @@ onUnmounted(() => {
         </div>
       </div>
     </div>
+
+    <CircuitDiagram
+      v-if="selectedTopology"
+      :topology="selectedTopology"
+      :devices="devices"
+      :device-runtimes="deviceRuntimes"
+    />
 
     <div class="devices-section">
       <h2>设备状态监控</h2>

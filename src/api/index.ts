@@ -94,6 +94,13 @@ export interface Bus {
   parentBusId?: string
 }
 
+export interface DeviceConnection {
+  fromDeviceId: string
+  toDeviceId: string
+  connectionType: string
+  powerFlow: string
+}
+
 export interface Topology {
   id: string
   name: string
@@ -101,6 +108,7 @@ export interface Topology {
   buses: Record<string, Bus>
   devices: Record<string, Device>
   deviceList: string[]
+  deviceConnections?: DeviceConnection[]
 }
 
 export interface SimulatorStatus {
