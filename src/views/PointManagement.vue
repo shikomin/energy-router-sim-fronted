@@ -19,6 +19,10 @@ const currentPoint = ref<Point>({
  modelType: 1,
  linkedProp: ''
 });
+const showSendModal = ref(false);
+const sendValue = ref<string>('');
+const currentSendPoint = ref<Point | null>(null);
+const sendLoading = ref(false);
 const signalTypes = [
  { value: 'yc', label: '遥测' },
  { value: 'yx', label: '遥信' },
@@ -227,6 +231,46 @@ const deletePoint = async (id: string) => {
  console.error(e);
  }
 };
+const openSendModal = (point: Point) => {
+ currentSendPoint.value = point;
+ sendValue.value = '';
+ showSendModal.value = true;
+};
+const closeSendModal = () => {
+ showSendModal.value = false;
+ currentSendPoint.value = null;
+ sendValue.value = '';
+};
+const sendPointValue = async () => {
+ if (!currentSendPoint.value || sendValue.value.trim() === '') {
+ error.value = '请输入有效的发送值';
+ return;
+ }
+ sendLoading.value = true;
+ error.value = '';
+ try {
+ const response = await fetch('/api-dev/points/send', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({
+ point: currentSendPoint.value,
+ value: sendValue.value.trim()
+ })
+ });
+ if (!response.ok) {
+ const data = await response.json();
+ throw new Error(data.error || '发送失败');
+ }
+ closeSendModal();
+ }
+ catch (e: any) {
+ error.value = e.message || '发送失败';
+ console.error(e);
+ }
+ finally {
+ sendLoading.value = false;
+ }
+};
 const deriveModelType = (signalType: string): number => {
  switch (signalType) {
  case 'yc': return 1;
@@ -299,6 +343,9 @@ onMounted(async () => {
               <td>{{ modelTypeLabels[point.modelType] }}</td>
               <td>{{ getLinkedPropName(point.linkedProp || '') || '-' }}</td>
               <td>
+                <button class="btn btn-small btn-send" @click="openSendModal(point)" v-if="point.signalType === 'yc' || point.signalType === 'yx'">
+                  发送
+                </button>
                 <button class="btn btn-small btn-primary" @click="openEditModal(point)">
                   编辑
                 </button>
@@ -380,6 +427,39 @@ onMounted(async () => {
         <div class="modal-footer">
           <button class="btn btn-secondary" @click="closeModal">取消</button>
           <button class="btn btn-primary" @click="savePoint">保存</button>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="showSendModal" class="modal-overlay" @click.self="closeSendModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h2>发送模拟值</h2>
+          <button class="modal-close" @click="closeSendModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="send-info">
+            <p><strong>点位ID：</strong>{{ currentSendPoint?.ptId }}</p>
+            <p><strong>点位名称：</strong>{{ currentSendPoint?.ptName }}</p>
+            <p><strong>信号类型：</strong>{{ currentSendPoint?.signalType === 'yc' ? '遥测' : '遥信' }}</p>
+            <p><strong>设备编号：</strong>{{ currentSendPoint?.deviceLocalNum }}</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label">模拟值</label>
+            <input
+              v-model="sendValue"
+              type="text"
+              class="input"
+              placeholder="请输入要发送的模拟值"
+              @keyup.enter="sendPointValue"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" @click="closeSendModal">取消</button>
+          <button class="btn btn-primary" @click="sendPointValue" :disabled="sendLoading">
+            {{ sendLoading ? '发送中...' : '发送' }}
+          </button>
         </div>
       </div>
     </div>
@@ -522,6 +602,17 @@ onMounted(async () => {
   box-shadow: 0 4px 12px rgba(218, 54, 51, 0.35);
 }
 
+.btn-send {
+  background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(35, 134, 54, 0.25);
+}
+
+.btn-send:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(35, 134, 54, 0.35);
+}
+
 .btn-small {
   padding: 0.3rem 0.6rem;
   font-size: 0.75rem;
@@ -647,6 +738,25 @@ onMounted(async () => {
   margin-top: 0.25rem;
   font-size: 0.75rem;
   color: #6e7681;
+}
+
+.send-info {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.send-info p {
+  margin: 0.35rem 0;
+  color: #c9d1d9;
+  font-size: 0.875rem;
+}
+
+.send-info strong {
+  color: #8b949e;
+  margin-right: 0.5rem;
 }
 
 .input,

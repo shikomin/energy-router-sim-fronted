@@ -101,9 +101,11 @@ const loadDeviceRuntimes = async () => {
   try {
     const response = await deviceApi.getAllRuntime()
     const runtimes = response.data || []
+    const newMap = new Map<string, DeviceRuntime>()
     runtimes.forEach((runtime: DeviceRuntime) => {
-      deviceRuntimes.value.set(runtime.deviceId, runtime)
+      newMap.set(runtime.deviceId, runtime)
     })
+    deviceRuntimes.value = newMap
   } catch (e) {
     console.error('加载设备状态失败', e)
   }
@@ -160,10 +162,14 @@ const resetSimulation = async () => {
 }
 
 const handleDeviceUpdates = (data: Record<string, any>) => {
+  console.log('WebSocket device update received:', JSON.stringify(data).substring(0, 500))
   if (data.devices) {
+    const newMap = new Map(deviceRuntimes.value)
     Object.entries(data.devices).forEach(([deviceId, runtime]) => {
-      deviceRuntimes.value.set(deviceId, runtime as DeviceRuntime)
+      newMap.set(deviceId, runtime as DeviceRuntime)
     })
+    deviceRuntimes.value = newMap
+    console.log('deviceRuntimes updated, size:', newMap.size)
   }
   if (data.busPowers) {
     busPowers.value = new Map(Object.entries(data.busPowers))
