@@ -4,10 +4,11 @@ export const WS_TOPICS = {
   DEVICES: '/topic/devices',
   SIMULATION: '/topic/simulation',
   TOPOLOGY: '/topic/topology',
-  SYSTEM: '/topic/system'
+  SYSTEM: '/topic/system',
+  MQTT_STATE: '/topic/mqtt_state'
 }
 
-export type MessageType = 'DEVICE_UPDATE' | 'SIMULATION_UPDATE' | 'TOPOLOGY_UPDATE' | 'SYSTEM_EVENT' | 'HEARTBEAT'
+export type MessageType = 'DEVICE_UPDATE' | 'SIMULATION_UPDATE' | 'TOPOLOGY_UPDATE' | 'SYSTEM_EVENT' | 'HEARTBEAT' | 'MQTT_STATE'
 
 export interface WebSocketMessage<T = unknown> {
   type: MessageType
@@ -209,6 +210,12 @@ export const subscribeSystemEvents = (callback: (data: unknown) => void): void =
     if (message.type === 'SYSTEM_EVENT') {
       callback(message.data)
     }
+  })
+}
+
+export const subscribeMqttState = (callback: (data: unknown) => void): void => {
+  wsClient.subscribe(WS_TOPICS.MQTT_STATE, (message) => {
+    callback(message.data)
   })
 }
 

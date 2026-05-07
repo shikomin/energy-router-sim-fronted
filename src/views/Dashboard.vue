@@ -20,7 +20,16 @@ const loading = ref(false)
 const error = ref('')
 const wsConnected = ref(false)
 
+// MQTT状态
+const mqttState = ref({
+  connected: false,
+  brokerAddress: '',
+  messageCount: 0,
+  pointCount: 0
+})
+
 let unsubDeviceUpdate: (() => void) | null = null
+let unsubMqttState: (() => void) | null = null
 
 const selectedTopology = computed(() => {
   return topologies.value.find(t => t.id === selectedTopologyId.value)
@@ -192,6 +201,18 @@ const handleDeviceUpdates = (data: Record<string, any>) => {
   }
 }
 
+const handleMqttState = (data: any) => {
+  if (data) {
+    mqttState.value = {
+      connected: data.connected ?? false,
+      brokerAddress: data.brokerAddress ?? '',
+      messageCount: data.messageCount ?? 0,
+      pointCount: data.pointCount ?? 0
+    }
+  }
+}
+
+
 const getDeviceStatusText = (deviceId: string): string => {
   const runtime = deviceRuntimes.value.get(deviceId)
   if (!runtime) return '离线'
@@ -230,6 +251,7 @@ const connectWebSocket = async () => {
     await wsManager.connect()
     wsConnected.value = wsManager.isConnected()
     unsubDeviceUpdate = wsManager.onDeviceUpdate(handleDeviceUpdates)
+    unsubMqttState = wsManager.onMqttState(handleMqttState)
   } catch (e) {
     console.error('Failed to connect WebSocket:', e)
     wsConnected.value = false
@@ -251,7 +273,12 @@ onUnmounted(() => {
     unsubDeviceUpdate()
     unsubDeviceUpdate = null
   }
+  if (unsubMqttState) {
+    unsubMqttState()
+    unsubMqttState = null
+  }
 })
+
 </script>
 
 <template>
@@ -361,6 +388,30 @@ onUnmounted(() => {
             <span :class="['status-value', wsConnected ? 'text-success' : 'text-danger']">
               {{ wsConnected ? '已连接' : '未连接' }}
             </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="control-section">
+        <h3>MQTT状态</h3>
+        <div class="status-info">
+          <div class="status-item">
+            <span class="status-label">连接状态:</span>
+            <span :class="['status-value', mqttState.connected ? 'text-success' : 'text-danger']">
+              {{ mqttState.connected ? '已连接' : '未连接' }}
+            </span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">MQTT地址:</span>
+            <span class="status-value">{{ mqttState.brokerAddress || '--' }}</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">发送消息数:</span>
+            <span class="status-value">{{ mqttState.messageCount }}</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">发送点位:</span>
+            <span class="status-value">{{ mqttState.pointCount }}</span>
           </div>
         </div>
       </div>
@@ -617,11 +668,17 @@ onUnmounted(() => {
   border-radius: 16px;
   margin-bottom: 1.5rem;
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: 1fr 1.5fr 1fr 1fr;
   gap: 1.5rem;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
+  .control-panel {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
   .control-panel {
     grid-template-columns: 1fr;
   }
