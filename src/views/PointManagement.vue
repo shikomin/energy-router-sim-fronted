@@ -23,6 +23,7 @@ const showSendModal = ref(false);
 const sendValue = ref<string>('');
 const currentSendPoint = ref<Point | null>(null);
 const sendLoading = ref(false);
+const sendAsSoe = ref(false);
 const signalTypes = [
  { value: 'yc', label: '遥测' },
  { value: 'yx', label: '遥信' },
@@ -237,9 +238,10 @@ const openSendModal = (point: Point) => {
  showSendModal.value = true;
 };
 const closeSendModal = () => {
- showSendModal.value = false;
- currentSendPoint.value = null;
- sendValue.value = '';
+  showSendModal.value = false;
+  currentSendPoint.value = null;
+  sendValue.value = '';
+  sendAsSoe.value = false;
 };
 const sendPointValue = async () => {
  if (!currentSendPoint.value || sendValue.value.trim() === '') {
@@ -249,14 +251,15 @@ const sendPointValue = async () => {
  sendLoading.value = true;
  error.value = '';
  try {
- const response = await fetch('/api-dev/points/send', {
- method: 'POST',
- headers: { 'Content-Type': 'application/json' },
- body: JSON.stringify({
- point: currentSendPoint.value,
- value: sendValue.value.trim()
- })
- });
+const response = await fetch('/api-dev/points/send', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    point: currentSendPoint.value,
+    value: sendValue.value.trim(),
+    isSoe: sendAsSoe.value
+  })
+});
  if (!response.ok) {
  const data = await response.json();
  throw new Error(data.error || '发送失败');
@@ -453,6 +456,13 @@ onMounted(async () => {
               placeholder="请输入要发送的模拟值"
               @keyup.enter="sendPointValue"
             />
+          </div>
+          <div v-if="currentSendPoint?.signalType === 'yx'" class="form-group">
+            <label class="form-label">
+              <input v-model="sendAsSoe" type="checkbox" class="checkbox" />
+              作为SOE事件发送
+            </label>
+            <p class="form-hint">勾选后将以事件序列形式发送此遥信信号</p>
           </div>
         </div>
         <div class="modal-footer">
@@ -731,6 +741,19 @@ onMounted(async () => {
   font-weight: 500;
   color: #8b949e;
   font-size: 0.85rem;
+}
+
+.form-label:has(.checkbox) {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
 }
 
 .form-hint {
