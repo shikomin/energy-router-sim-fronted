@@ -58,7 +58,7 @@ const deviceTypeMap: Record<string, string> = {
 };
 const deviceLocalNumMap: Record<string, string> = {
  'PCS_ACDC': '19',
- 'BMS': '',
+ 'BMS': '43',
  'DCDC_1': '12',
  'DCDC_2': '1',
  'MPPT': '13'
